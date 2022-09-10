@@ -27,6 +27,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.1.2",
+    "husky": "^8.0.1",
     "knex": "^2.3.0",
     "mysql": "^2.18.1",
     "nest-knexjs": "^0.0.12",
