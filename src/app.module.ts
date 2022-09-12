@@ -4,6 +4,10 @@ import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { DatabaseConfig } from './shared/database';
 import { ConfigModule } from '@nestjs/config';
+import { CartsModule } from './carts/carts.module';
+import { UsersModule } from './users/users.module';
+import { CategoriesModule } from './categories/categories.module';
+import { ShippingAddressesModule } from './shipping-addresses/shipping-addresses.module';
 
 @Module({
   imports: [
@@ -15,6 +19,10 @@ import { ConfigModule } from '@nestjs/config';
     }),
     ProductModule,
     OrderModule,
+    CartsModule,
+    UsersModule,
+    CategoriesModule,
+    ShippingAddressesModule,
   ],
 })
 export class AppModule {}
