@@ -7,13 +7,13 @@
     connection: {
       database: 'postgres',
       user: 'postgres',
-      password: 'postgrespw',
+      password: 'postgres',
     },
     seeds: {
-      directory: './database/seeds',
+      directory: 'database/seeds',
     },
     migrations: {
-      directory: './database/migrations',
+      directory: 'database/migrations',
     },
   },
 
@@ -22,7 +22,7 @@
     connection: {
       database: 'postgres',
       user: 'postgres',
-      password: 'passwordpw',
+      password: 'password',
     },
     pool: {
       min: 2,
@@ -38,18 +38,18 @@
     connection: {
       database: 'postgres',
       user: 'postgres',
-      password: 'passwordpw',
+      password: 'password',
     },
     pool: {
       min: 2,
       max: 10,
     },
     seeds: {
-      directory: './database/seeds',
+      directory: 'database/seeds',
     },
     migrations: {
       tableName: 'knex_migrations',
-      directory: './database/migrations',
+      directory: 'database/migrations',
     },
   },
 };
