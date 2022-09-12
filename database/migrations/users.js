@@ -11,6 +11,7 @@ exports.up = function (knex) {
     table.string('last_name');
     table.string('middle_name');
     table.string('password').notNullable();
+    table.datetime('created_at').defaultTo(Date.now());
   });
 };
 

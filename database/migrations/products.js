@@ -11,6 +11,7 @@ exports.up = function(knex) {
         table.integer('category_id').notNullable();
         table.double('price').notNullable();
         table.string('photo').notNullable();
+        table.datetime('created_at').defaultTo(Date.now());
     });
 };
 

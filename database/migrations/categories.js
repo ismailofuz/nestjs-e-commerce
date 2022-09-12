@@ -8,6 +8,7 @@
         table.increments('id');
         table.string('name').notNullable();
         table.integer('sub_category_id'); // category ga tegishli categories
+        table.datetime('created_at').defaultTo(Date.now());
     });
 };
 
