@@ -8,9 +8,11 @@ exports.up = function (knex) {
     table.increments('id');
     table.string('email');
     table.string('first_name');
+    // table.boolean('isSeller').defaultTo(false); // sotuvchi yoki sotuvchi emasligi
     table.string('last_name');
     table.string('middle_name');
     table.string('password').notNullable();
+    table.datetime('created_at').defaultTo(Date.now());
   });
 };
 
