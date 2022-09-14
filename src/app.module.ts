@@ -18,7 +18,7 @@ import { RolesModule } from './roles/roles.module';
     }),
     KnexModule.forRootAsync({
       useClass: DatabaseConfig,
-    }),q
+    }),
     ProductModule,
     OrderModule,
     CartsModule,
