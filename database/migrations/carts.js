@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.integer('product_id');
     table.integer('user_id').notNullable(); // bu cart kimdirga tegishli bo'ladi
     table.double('total_price');
-    table.datetime('created_at').defaultTo(Date.now());
+    table.date('created_at').defaultTo(knex.fn.now());
   });
 };
 

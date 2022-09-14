@@ -10,7 +10,7 @@
         table.double('total_price').notNullable();
         table.integer('product_id').notNullable();
         table.integer('quantity_product').notNullable();
-        table.datetime('created_at').defaultTo(Date.now());
+        table.date('created_at').defaultTo(knex.fn.now());
     });
 };
 
