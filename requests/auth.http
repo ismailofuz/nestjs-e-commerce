@@ -1,0 +1,24 @@
+###
+POST http://localhost:3000/v1/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+    "first_name": "Sirojiddin",
+    "last_name": "Ismoilov",
+    "isSeller": true,
+    "middle_name": "Rasuljon o'g'li",
+    "email": "sirojiddin11@gmail.com",
+    "username": "ismailof1",
+    "password": "123456781"
+}
+
+###
+POST http://localhost:3000/v1/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "ismailof1",
+    "password": "123456781"
+}
