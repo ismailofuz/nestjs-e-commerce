@@ -105,29 +105,4 @@ export class AuthService {
       throw new UnauthorizedException(`Invalid credentials`);
     }
   }
-
-  generateToken(user: any) {
-    const payload = {
-      id: user.id,
-      role_id: user.role_id,
-      username: user.username,
-    };
-    const token = this.jwtService.sign({ user: payload });
-
-    return {
-      user: {
-        id: user.id,
-        role_id: user.role_id,
-        username: user.username,
-      },
-      access_token: token,
-    };
-  }
-
-  private async passwordCompare(password: string, user: any) {
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) throw new UnauthorizedException('Invalid credentials!');
-    return this.generateToken(user);
-  }
 }
