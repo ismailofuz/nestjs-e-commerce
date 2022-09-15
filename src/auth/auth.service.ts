@@ -1,7 +1,5 @@
 import {
   ConflictException,
-  HttpException,
-  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,7 +8,9 @@ import { UserLoginDto } from './dto/user-login.dto';
 import { RegisterDto } from './dto/user-register.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { UserI } from 'src/users/user.interface';
 
+require('dotenv').config();
 @Injectable()
 export class AuthService {
   constructor(
@@ -18,41 +18,92 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  generateJwt(user: UserI) {
+    return this.jwtService.signAsync({ user }, { secret: 'iU83hdy0' });
+  }
+
+  hashPassword(password: string) {
+    return bcrypt.hash(password, 12);
+  }
+
+  comparePasswords(password: string, storedPasswordHash: string) {
+    return bcrypt.compare(password, storedPasswordHash);
+  }
+
+  private emailExists(email: string) {
+    email = email.toLowerCase();
+    return this.knex('users')
+      .where({ email })
+      .first()
+      .then((user) => {
+        if (user) {
+          return true;
+        }
+        return false;
+      });
+  }
+
+  private usernameExists(username: string) {
+    username = username.toLowerCase();
+    return this.knex('users')
+      .where({ username })
+      .first()
+      .then((user) => {
+        if (user) {
+          return true;
+        }
+        return false;
+      });
+  }
+
   async register(register: RegisterDto) {
-    const { username } = register;
-    const existsUser = await this.knex('users')
-      .where({
-        username,
-      })
-      .first();
-    if (existsUser) {
-      throw new ConflictException(`This ${register.username} already exists!`);
+    const { username, email, password, ...data } = register;
+
+    if (await this.usernameExists(username)) {
+      throw new ConflictException(
+        `This ${register.username} username already exists!`,
+      );
     }
-    const registerUser = await this.knex('users')
-      .insert(register)
+
+    if (await this.emailExists(email)) {
+      throw new ConflictException(
+        `This ${register.email} email already exists`,
+      );
+    }
+    return await this.knex('users')
+      .insert({
+        email: email.toLowerCase(),
+        username: username.toLowerCase(),
+        password: await this.hashPassword(password),
+        ...data,
+      })
       .returning('*');
-    return registerUser;
   }
 
   async login(login: UserLoginDto) {
     const { username, password } = login;
-    const hasUser = await this.knex('users')
-      .where({
-        username,
-      })
-      .first();
-
-    if (!hasUser) {
-      throw new HttpException(`Invalid credentials`, HttpStatus.UNAUTHORIZED);
+    if (!(await this.usernameExists(username))) {
+      throw new UnauthorizedException(`Invalid credentials`);
     }
-
-    // if (bcrypt.compare(password, hasUser.password)) {
-    //   // login bo'ladi
-    // } else {
-    //   return new HttpException(`Invalid credentials`, HttpStatus.UNAUTHORIZED);
-    // }
-
-    return this.passwordCompare(password, hasUser[0]);
+    const hasUser = await this.knex('users')
+      .where({ username: username.toLowerCase() })
+      .first()
+      .then((user) => {
+        if (user) {
+          return user;
+        } else {
+          throw new UnauthorizedException(`Invalid credentials`);
+        }
+      });
+    const isMatch = await this.comparePasswords(
+      login.password,
+      hasUser.password,
+    );
+    if (isMatch) {
+      return await this.generateJwt(hasUser);
+    } else {
+      throw new UnauthorizedException(`Invalid credentials`);
+    }
   }
 
   generateToken(user: any) {
